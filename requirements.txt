@@ -1,0 +1,18 @@
+# Core dependencies for Real-Time Object Detection System
+# Python 3.10+ required
+
+# Machine Learning - YOLOv8
+ultralytics>=8.0.0
+
+# Computer Vision
+opencv-python>=4.8.0
+
+# Web UI Framework
+streamlit>=1.28.0
+
+# Numerical computing
+numpy>=1.24.0
+
+# Optional: CPU-optimized inference (uncomment if you want to use ONNX Runtime)
+# onnxruntime>=1.15.0
+
