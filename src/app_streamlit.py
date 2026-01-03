@@ -65,7 +65,7 @@ else:
 # Page configuration
 st.set_page_config(
     page_title="Real-Time Object Detection",
-    page_icon="🎯",
+    page_icon=None,
     layout="wide"
 )
 
@@ -120,12 +120,12 @@ def run_capture_mode():
     Webcam Capture Mode: Snapshot-based detection with zero lag.
     Shows webcam preview, captures single frame on button click, runs YOLO once.
     """
-    st.header("📸 Webcam Capture Mode")
-    st.markdown("**Zero-lag snapshot detection** — Click Capture to detect objects in a single frame.")
-
+    st.header("Webcam Capture Mode")
+    st.markdown("**Zero-lag snapshot detection** - Click capture to detect objects in a single frame.")
+    
     # Show detection settings in sidebar for capture mode too
-    st.sidebar.header("⚙️ Detection Settings")
-
+    st.sidebar.header("Detection Settings")
+    
     # Confidence threshold slider
     conf_threshold = st.sidebar.slider(
         "Confidence Threshold",
@@ -171,12 +171,12 @@ def run_capture_mode():
     img = st.camera_input("Webcam Preview", label_visibility="visible")
 
     # Capture button
-    capture_button = st.button("📸 Capture Image", type="primary", use_container_width=True)
-
+    capture_button = st.button("Capture Image", type="primary", use_container_width=True)
+    
     # Handle capture
     if capture_button:
         if img is None:
-            st.warning("⚠️ Please allow camera access to capture images.")
+            st.warning("Please allow camera access to capture images.")
             return
 
         if cv2 is None or np is None:
@@ -188,7 +188,7 @@ def run_capture_mode():
         np_img = cv2.imdecode(np.frombuffer(img_bytes, np.uint8), cv2.IMREAD_COLOR)
 
         if np_img is None:
-            st.error("❌ Failed to decode image. Please try again.")
+            st.error("Failed to decode image. Please try again.")
             return
 
         # Resize if needed (for consistency with other modes)
@@ -198,7 +198,7 @@ def run_capture_mode():
             np_img = cv2.resize(np_img, (frame_w, frame_h), interpolation=cv2.INTER_LINEAR)
 
         # Run YOLO detection ONCE (this is the only inference call)
-        with st.spinner("🔍 Detecting objects..."):
+        with st.spinner("Detecting objects..."):
             detections = detection_engine.detect(np_img)
 
         # Draw detections on frame
@@ -208,11 +208,11 @@ def run_capture_mode():
         rgb = convert_bgr_to_rgb(annotated)
 
         # Display annotated image
-        st.subheader("📊 Detection Result")
+        st.subheader("Detection Result")
         st.image(rgb, caption="Annotated Image with Detections", use_container_width=True)
 
         # Display detection list
-        st.subheader("🔍 Detections")
+        st.subheader("Detections")
         if len(detections) == 0:
             st.info("No objects detected. Try adjusting the confidence threshold or capturing a different image.")
         else:
@@ -341,8 +341,8 @@ def main():
     initialize_session_state()
 
     # Title and description
-    st.title("🎯 Real-Time Object Detection System")
-
+    st.title("Real-Time Object Detection System")
+    
     # Get device info from detection engine (if loaded)
     device_info = "cpu"  # Default
     if st.session_state.detection_engine is not None:
@@ -356,7 +356,7 @@ def main():
     """)
 
     # Mode selection - MUST be first in sidebar
-    st.sidebar.header("🎯 Detection Mode")
+    st.sidebar.header("Detection Mode")
     mode = st.sidebar.radio(
         "Select Mode:",
         ["Webcam Capture", "Video File Stream", "Real-Time Webcam (High CPU)"],
@@ -370,8 +370,8 @@ def main():
         return  # Exit early - don't run real-time code
 
     # Sidebar controls (only shown for streaming modes)
-    st.sidebar.header("⚙️ Detection Settings")
-
+    st.sidebar.header("Detection Settings")
+    
     # Confidence threshold slider
     conf_threshold = st.sidebar.slider(
         "Confidence Threshold",
@@ -415,16 +415,16 @@ def main():
     config.IOU_THRESHOLD = iou_threshold
 
     # Performance settings
-    st.sidebar.header("⚡ Performance")
-
+    st.sidebar.header("Performance")
+    
     # Display device information
     if st.session_state.detection_engine is not None:
         device_name = st.session_state.detection_engine.get_device_name()
         device_display = "MPS (Apple Silicon)" if device_name == "mps" else "CPU"
         st.sidebar.markdown(f"**Inference device:** {device_display}")
         st.sidebar.caption(f"Using {device_name.upper()} for detection")
-
-    st.sidebar.caption("💡 **Tip:** Adjust FPS and frame skip for optimal performance")
+    
+    st.sidebar.caption("**Tip:** Adjust FPS and frame skip for optimal performance")
     target_fps = st.sidebar.slider(
         "Target FPS (approx)",
         min_value=getattr(config, "MIN_TARGET_FPS", 5),
@@ -445,8 +445,8 @@ def main():
     )
 
     # Input source selection (only for streaming modes)
-    st.sidebar.header("📹 Video Source")
-
+    st.sidebar.header("Video Source")
+    
     if mode == "Video File Stream":
         input_mode = "Video File"
         video_path = st.sidebar.text_input(
@@ -457,20 +457,20 @@ def main():
     else:  # Real-Time Webcam mode
         input_mode = "Webcam"
         video_path = None
-        st.sidebar.info("⚠️ **High CPU Usage**\n\nReal-time mode continuously processes frames. Use Webcam Capture mode for better performance.")
-
+        st.sidebar.info("**High CPU Usage**\n\nReal-time mode continuously processes frames. Use Webcam Capture mode for better performance.")
+    
     # Main area - simplified layout to minimize re-rendering
-    st.header("📺 Detection View")
-
+    st.header("Detection View")
+    
     # Control buttons - use fixed keys to prevent re-creation
     button_col1, button_col2 = st.columns([1, 1])
 
     with button_col1:
-        start_button = st.button("▶️ Start Detection", type="primary", use_container_width=True, key="start_btn")
-
+        start_button = st.button("Start Detection", type="primary", use_container_width=True, key="start_btn")
+    
     with button_col2:
-        stop_button = st.button("⏹️ Stop Detection", use_container_width=True, key="stop_btn")
-
+        stop_button = st.button("Stop Detection", use_container_width=True, key="stop_btn")
+    
     # Status message placeholder
     status_placeholder = st.empty()
 
@@ -498,13 +498,14 @@ def main():
 
             # Open video stream
             if st.session_state.video_stream and st.session_state.video_stream.open():
-                status_placeholder.success(f"✅ Video source opened: {input_mode}")
+                status_placeholder.success(f"Video source opened: {input_mode}")
+                # Fragment will start updating immediately - video appears instantly!
             else:
-                status_placeholder.error(f"❌ Failed to open video source: {input_mode}")
+                status_placeholder.error(f"Failed to open video source: {input_mode}")
                 if input_mode == "Webcam":
-                    status_placeholder.info("💡 Make sure your webcam is connected and not being used by another application.")
+                    status_placeholder.info("Make sure your webcam is connected and not being used by another application.")
                 else:
-                    status_placeholder.info("💡 Please check that the video file path is correct and the file exists.")
+                    status_placeholder.info("Please check that the video file path is correct and the file exists.")
                 st.session_state.is_running = False
 
         except Exception as e:
@@ -517,9 +518,9 @@ def main():
         st.session_state.is_running = False
         st.session_state.video_stream = None
         st.session_state.frame_skip_counter = 0
-        status_placeholder.info("⏹️ Detection stopped.")
-
-    # Store current frame skip setting for updater
+        status_placeholder.info("Detection stopped.")
+    
+    # Store current frame skip setting for fragment
     st.session_state.current_frame_skip = frame_skip
 
     # Call update function once per Streamlit run when running
@@ -528,7 +529,7 @@ def main():
             # Call the updater: it will decide whether to process based on timing
             update_video_frame(frame_placeholder)
         else:
-            status_placeholder.error("❌ Video stream is not opened. Please click 'Start Detection'.")
+            status_placeholder.error("Video stream is not opened. Please click 'Start Detection'.")
             st.session_state.is_running = False
     else:
         # Clear frame when stopped
@@ -536,8 +537,8 @@ def main():
 
     # Display detection statistics
     if st.session_state.last_detections:
-        st.sidebar.header("📊 Recent Detections")
-
+        st.sidebar.header("Recent Detections")
+        
         # Create a summary of detections
         detection_summary = {}
         for det in st.session_state.last_detections:
@@ -558,7 +559,7 @@ def main():
 
     # Footer information
     st.sidebar.markdown("---")
-    st.sidebar.markdown("### ℹ️ About")
+    st.sidebar.markdown("### About")
     st.sidebar.info("""
     **CPU-Only Detection**
 
