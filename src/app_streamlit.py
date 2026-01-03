@@ -115,6 +115,7 @@ def load_detection_engine():
     return st.session_state.detection_engine
 
 
+<<<<<<< Updated upstream
 def run_capture_mode():
     """
     Webcam Capture Mode: Snapshot-based detection with zero lag.
@@ -237,6 +238,12 @@ def run_capture_mode():
                     st.text(f"{i}. {class_name}: {confidence:.1%} at ({xmin}, {ymin}) - ({xmax}, {ymax})")
 
 
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> Stashed changes
+@st.fragment(run_every=0.05)  # Update every 50ms = 20 FPS max - smooth updates
+>>>>>>> ccdcad7 (Resolve merge conflict in src/app_streamlit.py)
 def update_video_frame(frame_placeholder):
     """
     Regular function that updates the video frame.
@@ -354,7 +361,12 @@ def main():
     This application performs real-time object detection using the YOLOv8 nano model.
     **Running on device:** {device_info.upper()}
     """)
+<<<<<<< HEAD
 
+=======
+    
+<<<<<<< Updated upstream
+>>>>>>> ccdcad7 (Resolve merge conflict in src/app_streamlit.py)
     # Mode selection - MUST be first in sidebar
     st.sidebar.header("Detection Mode")
     mode = st.sidebar.radio(
@@ -371,6 +383,10 @@ def main():
 
     # Sidebar controls (only shown for streaming modes)
     st.sidebar.header("Detection Settings")
+=======
+    # Sidebar controls
+    st.sidebar.header("⚙️ Detection Settings")
+>>>>>>> Stashed changes
     
     # Confidence threshold slider
     conf_threshold = st.sidebar.slider(
@@ -443,21 +459,38 @@ def main():
         step=1,
         help="Skip N frames between detections: 0 = every frame, 1 = every 2nd frame, 2 = every 3rd frame. Reduces detection load while keeping smooth video."
     )
+<<<<<<< HEAD
 
+=======
+    
+<<<<<<< Updated upstream
+>>>>>>> ccdcad7 (Resolve merge conflict in src/app_streamlit.py)
     # Input source selection (only for streaming modes)
     st.sidebar.header("Video Source")
+=======
+    # Input source selection
+    st.sidebar.header("📹 Video Source")
+    input_mode = st.sidebar.radio(
+        "Select input source:",
+        ["Webcam", "Video File"],
+        help="Choose between live webcam feed or a local video file"
+    )
+>>>>>>> Stashed changes
     
-    if mode == "Video File Stream":
-        input_mode = "Video File"
+    video_path = None
+    if input_mode == "Video File":
         video_path = st.sidebar.text_input(
             "Video file path:",
             placeholder="Enter path to video file (e.g., sample_videos/demo.mp4)",
             help="Enter the full path to your video file"
         )
+<<<<<<< Updated upstream
     else:  # Real-Time Webcam mode
         input_mode = "Webcam"
         video_path = None
         st.sidebar.info("**High CPU Usage**\n\nReal-time mode continuously processes frames. Use Webcam Capture mode for better performance.")
+=======
+>>>>>>> Stashed changes
     
     # Main area - simplified layout to minimize re-rendering
     st.header("Detection View")
